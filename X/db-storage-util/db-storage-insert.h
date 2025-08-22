@@ -1,29 +1,14 @@
-#include <sstream>
-#include <string>
+#pragma once
 #include <vector>
-#include "../transaction-utils/Transaction.h"
-#include "../keyspace-hashtable/KeySpace.h"
-using namespace std;
+#include <string>
+#include "transaction-utils/Transaction.h"
+#include "keyspace-hashtable/KeySpace.h"
 
-Transaction execute_insert(std::string inputCommand) {
-    std::string keyspaceName, blockName, data, word, lastWord;
-    std::stringstream stream(inputCommand);
-    while(stream>>word) {
-        if(lastWord.find("BLOCK")) {
-            blockName=word;
-        }
-        if(lastWord.find("KEYSPACE")) {
-            keyspaceName=word;
-        }
-        lastWord=word;
+Transaction execute_insert(KeySpace& db, const std::string& keyspaceName, const std::vector<float>& record) {
+    if (!db.exists(keyspaceName)) {
+        return Transaction(false, "Keyspace does not exist");
     }
-    data=lastWord;
-    std::vector<std::string> temp=KeySpace::getKeySpaceBlock(keyspaceName);
-    temp.push_back(data);
-    KeySpace::setKeySpaceBlock(keyspaceName, temp);
-    std::string str(temp.begin(), temp.end());
-    std::string str="Hello World";
-    Transaction transaction=Transaction(str, 200);
-    return transaction;
-}
 
+    db.insertIntoBlock(keyspaceName, record);
+    return Transaction(true, "Inserted record into keyspace '" + keyspaceName + "'");
+}

@@ -1,24 +1,22 @@
-#ifndef TRANSACTION_H
-#define TRANSACTION_H
 #pragma once
 #include <string>
-using namespace std;
 
 class Transaction {
-    private:
-        std::string transactionMessage;
-        int transactionStatus;
-    public:
-        Transaction() {}
-        Transaction(std::string tm, int status) {
-            transactionMessage=tm;
-            transactionStatus=status;
-        }
-        int getTransactionStatus() {
-            return transactionStatus;
-        }
-        std::string getTransactionMessage() {
-            return transactionMessage;
-        }
+private:
+    std::string status;  // "SUCCESS" or "FAILURE"
+    std::string message;
+
+public:
+    // Old constructor
+    Transaction(const std::string& s, const std::string& m)
+        : status(s), message(m) {}
+
+    // New constructor with bool
+    Transaction(bool success, const std::string& m) {
+        status = success ? "SUCCESS" : "FAILURE";
+        message = m;
+    }
+
+    std::string getStatus() const { return status; }
+    std::string getMessage() const { return message; }
 };
-#endif
