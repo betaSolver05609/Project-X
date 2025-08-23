@@ -1,5 +1,5 @@
 {
-  "metric" : "DOT",
+  "metric" : "EUCLIDEAN",
   "records" : 
   [
     [
