@@ -1,7 +1,7 @@
-
 #include "alter.h"
 #include "../../common_utils/common_utils.h"
 #include <iostream>
+#include <algorithm>
 
 bool isValidMetric(const std::string &metric)
 {
@@ -10,7 +10,16 @@ bool isValidMetric(const std::string &metric)
                    [](unsigned char c)
                    { return std::tolower(c); });
 
-    return (m == "cosine" || m == "euclidean" || m == "dot");
+    return (m == "cosine" ||
+            m == "euclidean" ||
+            m == "manhattan" ||
+            m == "chebyshev" ||
+            m == "jaccard" ||
+            m == "mahalanobis" ||
+            m == "hamming" ||
+            m == "jsd" ||
+            m == "minkowski" ||
+            m == "dot");
 }
 
 void handleAlter(std::stringstream &ss, KeySpace &db)
@@ -27,8 +36,10 @@ void handleAlter(std::stringstream &ss, KeySpace &db)
         {
             if (!isValidMetric(metricType))
             {
-                std::cout << "Invalid metric type '" << metricType
-                          << "'. Supported: COSINE, EUCLIDEAN, DOT.\n";
+                std::cout << "Invalid metric type '" << metricType << "'.\n"
+                          << "Supported metrics: COSINE, EUCLIDEAN, MANHATTAN, "
+                          << "CHEBYSHEV, JACCARD, MAHALANOBIS, HAMMING, JSD, "
+                          << "MINKOWSKI, DOT.\n";
                 return;
             }
             if (db.alterMetric(name, metricType))
