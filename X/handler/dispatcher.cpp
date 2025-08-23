@@ -7,6 +7,7 @@
 #include "../command/show/show.h"
 #include "../command/drop/drop.h"
 #include "../command/exit/exit.h"
+#include "../command/ingest/ingest.h"
 #include "../common_utils/common_utils.h"
 #include <iostream>
 
@@ -25,6 +26,8 @@ bool dispatchCommand(std::stringstream &ss, KeySpace &db)
         handleList(ss, db);
     else if (cmd == "ALTER")
         handleAlter(ss, db);
+    else if (cmd == "INGEST")
+        handleIngestCommand(ss, db);
     else if (cmd == "SHOW")
         handleShow(ss, db);
     else if (cmd == "DROP")
