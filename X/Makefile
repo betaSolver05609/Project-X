@@ -3,8 +3,9 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -I. 
 LDFLAGS = -ljsoncpp
 
-# Project files
-SRC = db-start.cpp
+# Find all .cpp files recursively
+SRC = $(shell find . -name "*.cpp")
+
 OUT = db_start
 
 # Default target
