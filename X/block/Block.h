@@ -3,15 +3,15 @@
 #include <cmath>
 #include <algorithm>
 #include <string>
-#include <jsoncpp/json/json.h> // ✅ required for persistence
+#include <jsoncpp/json/json.h> 
 
 class Block
 {
 private:
     std::vector<std::vector<float>> records;
-    std::string metric; // similarity metric: cosine, euclidean, dot
+    std::string metric; 
 
-    // --- helper functions ---
+    
     float cosineSimilarity(const std::vector<float> &a, const std::vector<float> &b) const
     {
         float dot = 0.0, normA = 0.0, normB = 0.0;
@@ -47,12 +47,12 @@ private:
         if (metric == "cosine")
             return cosineSimilarity(a, b);
         else if (metric == "euclidean")
-            // convert distance → similarity (invert)
+            
             return 1.0f / (1.0f + euclideanDistance(a, b));
         else if (metric == "dot")
             return dotProduct(a, b);
         else
-            return cosineSimilarity(a, b); // default fallback
+            return cosineSimilarity(a, b); 
     }
 
 public:
@@ -86,7 +86,7 @@ public:
             sims.push_back({(int)i, score});
         }
 
-        // sort descending (best similarity first)
+        
         std::sort(sims.begin(), sims.end(),
                   [](auto &a, auto &b)
                   { return a.second > b.second; });
@@ -98,9 +98,9 @@ public:
     }
 
     std::string getMetric() const { return metric; }
-    void setMetric(const std::string &m) { metric = m; } // ✅ allow changing metric
+    void setMetric(const std::string &m) { metric = m; } 
 
-    // ✅ for persistence
+    
     Json::Value toJson() const
     {
         Json::Value root;

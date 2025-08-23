@@ -23,7 +23,7 @@ public:
         keyspaceBlocks[keyspaceName].insertRecord(record);
     }
 
-    // 🔎 Search inside a keyspace
+    
     std::vector<std::pair<int, float>> searchInKeyspace(
         const std::string &keyspaceName,
         const std::vector<float> &queryVector,
@@ -34,16 +34,16 @@ public:
         {
             return it->second.findNearest(queryVector, top_k);
         }
-        return {}; // return empty if keyspace not found
+        return {}; 
     }
 
-    // ✅ check if keyspace exists
+    
     bool exists(const std::string &name) const
     {
         return keyspaceBlocks.find(name) != keyspaceBlocks.end();
     }
 
-    // 📋 list all keyspaces
+    
     std::vector<std::string> listKeyspaces() const
     {
         std::vector<std::string> names;
@@ -54,7 +54,7 @@ public:
         return names;
     }
 
-    // 📂 fetch all records from a keyspace
+    
     std::vector<std::vector<float>> getRecords(const std::string &keyspaceName) const
     {
         auto it = keyspaceBlocks.find(keyspaceName);
@@ -71,9 +71,9 @@ public:
         if (it != keyspaceBlocks.end())
         {
             keyspaceBlocks.erase(it);
-            return true; // successfully deleted
+            return true; 
         }
-        return false; // keyspace not found
+        return false; 
     }
 
     std::vector<std::pair<int, std::vector<float>>> getRecordsWithId(const std::string &keyspaceName) const
@@ -92,10 +92,10 @@ public:
         auto it = keyspaceBlocks.find(name);
         if (it != keyspaceBlocks.end())
         {
-            // ✅ Save metric
+            
             root["metric"] = it->second.getMetric();
 
-            // ✅ Save records
+            
             for (auto &vec : it->second.getRecords())
             {
                 Json::Value arr(Json::arrayValue);
@@ -109,14 +109,14 @@ public:
 
     void fromJson(const std::string &name, const Json::Value &root)
     {
-        // ✅ Load metric (default to cosine if missing)
+        
         std::string metric = root.isMember("metric")
                                  ? root["metric"].asString()
                                  : "cosine";
 
         Block block(metric);
 
-        // ✅ Load records
+        
         for (auto &rec : root["records"])
         {
             std::vector<float> vec;
@@ -133,7 +133,7 @@ public:
         auto it = keyspaceBlocks.find(name);
         if (it != keyspaceBlocks.end())
         {
-            it->second.setMetric(metricType); // assumes Block supports setMetric()
+            it->second.setMetric(metricType); 
             return true;
         }
         return false;
@@ -145,6 +145,6 @@ public:
         {
             return it->second.getMetric();
         }
-        return ""; // not found
+        return ""; 
     }
 };
