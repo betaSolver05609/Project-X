@@ -26,5 +26,6 @@ run: $(OUT)
 # Clean compiled files
 clean:
 	find . -name "*.o" -o -name "*.d" -delete
+	find . -name "*.o" -type f -delete
 	rm -f $(OUT)
 
