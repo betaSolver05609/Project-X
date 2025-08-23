@@ -11,11 +11,6 @@ private:
     std::vector<std::vector<float>> records;
     std::string metric; // similarity metric: cosine, euclidean, dot
 
-    void setMetric(const std::string &newMetric)
-    {
-        metric = newMetric;
-    }
-
     // --- helper functions ---
     float cosineSimilarity(const std::vector<float> &a, const std::vector<float> &b) const
     {
