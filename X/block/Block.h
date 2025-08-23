@@ -3,61 +3,53 @@
 #include <cmath>
 #include <algorithm>
 #include <string>
-#include <jsoncpp/json/json.h> 
+#include <memory>
+#include <jsoncpp/json/json.h>
+#include "similarity-engines/factory.h"
 
 class Block
 {
 private:
     std::vector<std::vector<float>> records;
-    std::string metric; 
-
-    
-    float cosineSimilarity(const std::vector<float> &a, const std::vector<float> &b) const
-    {
-        float dot = 0.0, normA = 0.0, normB = 0.0;
-        for (size_t i = 0; i < a.size(); i++)
-        {
-            dot += a[i] * b[i];
-            normA += a[i] * a[i];
-            normB += b[i] * b[i];
-        }
-        if (normA == 0 || normB == 0)
-            return 0.0f;
-        return dot / (std::sqrt(normA) * std::sqrt(normB));
-    }
-
-    float euclideanDistance(const std::vector<float> &a, const std::vector<float> &b) const
-    {
-        float sum = 0.0;
-        for (size_t i = 0; i < a.size(); i++)
-            sum += (a[i] - b[i]) * (a[i] - b[i]);
-        return std::sqrt(sum);
-    }
-
-    float dotProduct(const std::vector<float> &a, const std::vector<float> &b) const
-    {
-        float dot = 0.0;
-        for (size_t i = 0; i < a.size(); i++)
-            dot += a[i] * b[i];
-        return dot;
-    }
-
-    float computeSimilarity(const std::vector<float> &a, const std::vector<float> &b) const
-    {
-        if (metric == "cosine")
-            return cosineSimilarity(a, b);
-        else if (metric == "euclidean")
-            
-            return 1.0f / (1.0f + euclideanDistance(a, b));
-        else if (metric == "dot")
-            return dotProduct(a, b);
-        else
-            return cosineSimilarity(a, b); 
-    }
+    std::string metric;
+    std::unique_ptr<SimilarityEngine> engine;
 
 public:
-    Block(const std::string &metricType = "cosine") : metric(metricType) {}
+    // Constructor
+    Block(const std::string &metricType = "cosine")
+        : metric(metricType), engine(createSimilarityEngine(metricType)) {}
 
+    // Deep copy constructor
+    Block(const Block &other)
+        : records(other.records), metric(other.metric),
+          engine(createSimilarityEngine(other.metric)) {}
+
+    // Deep copy assignment operator
+    Block &operator=(const Block &other)
+    {
+        if (this != &other)
+        {
+            records = other.records;
+            metric = other.metric;
+            engine = createSimilarityEngine(other.metric); // re-create engine
+        }
+        return *this;
+    }
+
+    // Move constructor and assignment (default works fine)
+    Block(Block &&) noexcept = default;
+    Block &operator=(Block &&) noexcept = default;
+
+    // Metric functions
+    void setMetric(const std::string &m)
+    {
+        metric = m;
+        engine = createSimilarityEngine(m);
+    }
+
+    std::string getMetric() const { return metric; }
+
+    // Record management
     void insertRecord(const std::vector<float> &record)
     {
         records.push_back(record);
@@ -76,17 +68,24 @@ public:
         return out;
     }
 
-    std::vector<std::pair<int, float>> findNearest(
-        const std::vector<float> &query, int top_k = 1) const
+    // Nearest neighbor search
+    std::vector<std::pair<int, float>> findNearest(const std::vector<float> &query, int top_k = 1) const
     {
         std::vector<std::pair<int, float>> sims;
         for (size_t i = 0; i < records.size(); i++)
         {
-            float score = computeSimilarity(query, records[i]);
-            sims.push_back({(int)i, score});
+            float sim;
+            if (metric == "MAHALABONIS")
+            {
+                sim = engine->computeWithDataset(query, records[i], records);
+            }
+            else
+            {
+                sim = engine->compute(query, records[i]);
+            }
+            sims.emplace_back(i, sim);
         }
 
-        
         std::sort(sims.begin(), sims.end(),
                   [](auto &a, auto &b)
                   { return a.second > b.second; });
@@ -97,10 +96,7 @@ public:
         return sims;
     }
 
-    std::string getMetric() const { return metric; }
-    void setMetric(const std::string &m) { metric = m; } 
-
-    
+    // JSON serialization
     Json::Value toJson() const
     {
         Json::Value root;
@@ -118,6 +114,7 @@ public:
     void fromJson(const Json::Value &root)
     {
         metric = root.get("metric", "cosine").asString();
+        engine = createSimilarityEngine(metric);
         records.clear();
         for (auto &rec : root["records"])
         {
