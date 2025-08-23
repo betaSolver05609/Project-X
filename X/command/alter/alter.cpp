@@ -19,7 +19,7 @@ void handleAlter(std::stringstream &ss, KeySpace &db)
             {
                 std::cout << "Keyspace '" << name
                           << "' metric changed to '" << metricType << "'.\n";
-                saveDb(db); // persist update
+                saveDb(db); 
             }
             else
             {

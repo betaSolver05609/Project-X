@@ -24,9 +24,9 @@ int main()
 
         std::stringstream ss(line);
 
-        // Dispatcher now handles parsing + routing
+        
         if (dispatchCommand(ss, db))
-            break;  // EXIT was called
+            break;  
     }
 
     std::cout << "Bye 👋\n";

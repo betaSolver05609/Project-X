@@ -4,7 +4,7 @@
 
 bool handleExit(std::stringstream &ss, KeySpace &db)
 {
-    (void)ss; // unused
+    (void)ss; 
     saveDb(db);
     std::cout << "Exiting. Database saved.\n";
     return true;

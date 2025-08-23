@@ -7,13 +7,13 @@ void handleSearch(std::stringstream &ss, KeySpace &db) {
     ss >> keyspace;
 
     std::string vecStr;
-    std::getline(ss, vecStr, 'T'); // read until "TOP"
+    std::getline(ss, vecStr, 'T'); 
     auto query = parseVector(vecStr);
 
     std::string topWord;
     int topk = 1;
     if (ss >> topWord >> topk) {
-        // parsed TOP k
+        
     }
 
     auto results = db.searchInKeyspace(keyspace, query, topk);

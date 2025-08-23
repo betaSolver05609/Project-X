@@ -13,12 +13,12 @@ void handleCreate(std::stringstream &ss, KeySpace &db)
 
         std::string withWord, metricWord, metricType = "cosine";
 
-        // Optional "WITH METRIC <type>"
+        
         if (ss >> withWord >> metricWord >> metricType)
         {
             if (withWord != "WITH" || metricWord != "METRIC")
             {
-                metricType = "cosine"; // fallback
+                metricType = "cosine"; 
             }
         }
 

@@ -34,5 +34,5 @@ bool dispatchCommand(std::stringstream &ss, KeySpace &db)
     else
         std::cout << "Unknown command.\n";
 
-    return false; // keep running
+    return false; 
 }

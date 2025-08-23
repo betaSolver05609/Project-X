@@ -16,5 +16,5 @@ void handleInsert(std::stringstream &ss, KeySpace &db)
 
     std::cout << t.getStatus() << " : " << t.getMessage() << "\n";
 
-    saveDb(db); // persist immediately
+    saveDb(db); 
 }
