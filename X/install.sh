@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
+# ===============================
+# Project X Installer (Portable)
+# ===============================
 
 set -e  # Exit on error
+
+# --- Self-heal CRLF issue ---
+if file "$0" | grep -q "CRLF"; then
+    echo "[fix] Converting CRLF to LF line endings..."
+    if command -v dos2unix >/dev/null 2>&1; then
+        dos2unix "$0"
+    else
+        sed -i 's/\r$//' "$0"
+    fi
+    exec "$0" "$@"   # restart script after fix
+fi
 
 PROJECT_NAME="projectx"
 BUILD_BINARY="db_start"
@@ -16,7 +30,7 @@ elif command -v dnf >/dev/null 2>&1; then
 elif command -v yum >/dev/null 2>&1; then
     INSTALL_CMD="sudo yum install -y"
 else
-    echo "Unsupported package manager. Please install g++, make, and libjsoncpp manually."
+    echo "Unsupported package manager. Please install g++, make, and jsoncpp manually."
     exit 1
 fi
 
@@ -32,12 +46,13 @@ for pkg in g++ make; do
     fi
 done
 
-# JSONCPP library
-if ! ldconfig -p | grep -q libjsoncpp; then
-    echo "Installing libjsoncpp-dev..."
-    $INSTALL_CMD libjsoncpp-dev
+# JSONCPP library (dev headers)
+if ! ls /usr/include/jsoncpp/json/json.h >/dev/null 2>&1 && \
+   ! ls /usr/include/json/json.h >/dev/null 2>&1; then
+    echo "Installing jsoncpp headers..."
+    $INSTALL_CMD libjsoncpp-dev || $INSTALL_CMD jsoncpp-devel || true
 else
-    echo "✔ libjsoncpp found"
+    echo "✔ jsoncpp headers found"
 fi
 
 echo "[3/4] Building project in $ROOT_DIR ..."
@@ -53,11 +68,8 @@ fi
 echo "[4/4] Installing launcher..."
 
 # Install path (prefer ~/.local/bin if available)
-if [ -d "$HOME/.local/bin" ] || mkdir -p "$HOME/.local/bin"; then
-    INSTALL_DIR="/usr/local/bin"
-else
-    INSTALL_DIR="/usr/local/bin"
-fi
+INSTALL_DIR="$HOME/.local/bin"
+mkdir -p "$INSTALL_DIR"
 
 # Wrapper script that always runs from ProjectX/X
 cat <<EOF > "$INSTALL_DIR/$PROJECT_NAME"

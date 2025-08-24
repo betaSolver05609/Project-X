@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <string>
 #include <memory>
-#include <jsoncpp/json/json.h>
+#include "common_utils/json_portable.h"
 #include "similarity-engines/factory.h"
 
 class Block
