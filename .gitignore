@@ -1,0 +1,8 @@
+# Ignore the db_start file
+db_start
+
+# Ignore everything under the data/ directory
+data/
+
+db_start.d
+db_start.o
