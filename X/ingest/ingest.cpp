@@ -1,7 +1,9 @@
 #include "ingest.h"
+#include "../ingest/parsers/csv_parser.h"
+#include "../ingest/parsers/json_parser.h"
 #include <fstream>
 #include <iostream>
-#include <iomanip> // for std::setw
+#include <iomanip>
 #include <jsoncpp/json/json.h>
 
 bool handleIngest(std::string keyspaceName, std::string filepathArg, KeySpace &db)
@@ -28,24 +30,21 @@ bool handleIngest(std::string keyspaceName, std::string filepathArg, KeySpace &d
         return false;
     }
 
-    // Load JSON
-    std::ifstream file(filepath);
-    if (!file.is_open())
-    {
-        std::cerr << "Failed to open file: " << filepath << "\n";
+    std::vector<std::vector<float>> records;
+
+    // --- Detect file extension ---
+    if (filepath.size() >= 5 && filepath.substr(filepath.size()-5) == ".json") {
+        records = parseJsonFile(filepath);
+    }
+    else if (filepath.size() >= 4 && filepath.substr(filepath.size()-4) == ".csv") {
+        records = parseCsvFile(filepath);
+    }
+    else {
+        std::cerr << "Unsupported file format: " << filepath << "\n";
         return false;
     }
 
-    Json::Value root;
-    file >> root;
-
-    if (!root.isMember("records") || !root["records"].isArray())
-    {
-        std::cerr << "Invalid file format. Must contain { \"records\": [[...], ...] }\n";
-        return false;
-    }
-
-    int total = root["records"].size();
+    int total = records.size();
     if (total == 0)
     {
         std::cout << "No records found in file.\n";
@@ -53,18 +52,14 @@ bool handleIngest(std::string keyspaceName, std::string filepathArg, KeySpace &d
     }
 
     int count = 0;
-    for (auto &rec : root["records"])
+    for (auto &vec : records)
     {
-        std::vector<float> vec;
-        for (auto &v : rec)
-            vec.push_back(v.asFloat());
-
         db.insertIntoBlock(keyspaceName, vec);
         count++;
 
         // --- Progress bar ---
         int percent = (count * 100) / total;
-        int barWidth = 50; // length of progress bar
+        int barWidth = 50;
         int filled = (percent * barWidth) / 100;
 
         std::cout << "\r[";
