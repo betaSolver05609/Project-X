@@ -29,6 +29,9 @@ Future Capabilities:
 
 ---
 
+[![GitHub Pages](https://img.shields.io/badge/docs-github--pages-blue?logo=github)](https://betasolver05609.github.io/project-x/)
+
+
 ## ⚙️ System Requirements
 
 - **Operating System:**  
