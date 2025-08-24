@@ -4,7 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
-#include <jsoncpp/json/json.h>
+#include "common_utils/json_portable.h"
 
 bool handleIngest(std::string keyspaceName, std::string filepathArg, KeySpace &db)
 {

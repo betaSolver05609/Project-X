@@ -2,7 +2,7 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <jsoncpp/json/json.h>
+#include "common_utils/json_portable.h"
 #include "block/Block.h"
 
 class KeySpace

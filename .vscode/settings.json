@@ -3,6 +3,7 @@
     "files.associations": {
         "memory": "cpp",
         "cmath": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "fstream": "cpp"
     }
 }

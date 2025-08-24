@@ -1,5 +1,5 @@
 #include "json_parser.h"
-#include <jsoncpp/json/json.h>
+#include "common_utils/json_portable.h"
 #include <fstream>
 #include <iostream>
 
