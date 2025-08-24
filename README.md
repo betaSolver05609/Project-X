@@ -1,92 +1,80 @@
-# Project-X VectorDB  
+# Project-X
 
-A lightweight, CLI-based vector database written in C++.  
-Supports multiple keyspaces, configurable similarity metrics, persistence to disk, and simple record management.  
+Project X is a lightweight, high-performance Vector Database designed for AI developers, researchers, and engineers who need to ingest, store, and search embeddings efficiently.
+
+Unlike traditional, resource-heavy databases, Project X is written entirely in modern C++, giving it a low memory footprint and blazing-fast performance. This makes it ideal for rapid prototyping, experimentation, and deployment in environments where speed and efficiency are critical.
+
+Key Highlights for AI Developers:
+
+Efficient Embedding Storage – Seamlessly ingest word embeddings, sentence embeddings, or any numerical vector data.
+
+Fast Similarity Search – Perform nearest-neighbor or similarity lookups without the overhead of large-scale database engines.
+
+Lightweight & Portable – Minimal dependencies, easy to integrate into existing ML pipelines or deploy on resource-constrained systems.
+
+Experimentation Ready – Perfect for testing new AI models, validating embedding quality, or building quick prototypes.
+
+With Project X, AI developers can focus on building and experimenting with intelligent systems — from semantic search and recommendation engines to custom NLP applications — without being slowed down by heavy database infrastructure.
+
+Current Capabilities:
+1. Ingesting large volumes of data along with disk persistence
+2. Supports Ingesting CSV and JSON format files
+3. Search capabilities includes metrics like COSINE, EUCLIDEAN, MANHATTAN, CHEBYSHEV, JACCARD, MAHALANOBIS, HAMMING, JSD,MINKOWSKI and DOT
+4. Easy CLI based access with simple commands
+
+Future Capabilities:
+1. gRPC and REST access
+2. Centralized Server Features along with CLI versions
+3. Index Optimization with ASN and HSNW
 
 ---
 
-## ✨ Features
-- Create and drop **keyspaces** (logical vector collections).  
-- Configurable similarity metrics:
-  - `COSINE`
-  - `EUCLIDEAN`
-  - `DOT`
-- Insert and search vector records.  
-- Change keyspace metrics (`ALTER KEYSPACE … SET METRIC …`).  
-- Persistence: each keyspace is stored as `data/<KEYSPACE>.json`.  
-- Show current records or metrics per keyspace.  
+## ⚙️ System Requirements
+
+- **Operating System:**  
+  - Linux (Ubuntu/Debian recommended)  
+  - Or Windows with **WSL2** (Ubuntu/Debian)  
+
+- **Dependencies:**  
+  - `g++` (C++17 or higher)  
+  - `make`  
+  - `libjsoncpp`  
+
+**The installer will automatically check and install these dependencies if missing.** 
 
 ---
 
-## 🔧 Build
+## 📦 Download
+
+Download the latest release from the following link:  
+👉 [Download Project-X](<INSERT_LINK_HERE>)  
+
+**Installation Steps**
 ```bash
-make
+1. unzip Project-X.zip
+2. cd Project-X/X
+3. chmod +x install.sh
+4. ./install.sh
+```
+The installer will install all the required dependency and build the Database Engine
 
+**Start**
+In your terminal run
+```bash
+projectx
+```
+it will start the database
 
-$ ./db_start
-Welcome to Project-X VectorDB CLI
->>
+**After installation if you get the error "command not found"
+then add the following line in your bashrc or zshrc
 
->> CREATE KEYSPACE USERS
-Keyspace 'USERS' created with metric 'cosine'.
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+```
 
->> CREATE KEYSPACE VECTOR WITH METRIC DOT
-Keyspace 'VECTOR' created with metric 'dot'.
+and reload your shell
 
+```bash
+source ~/.bashrc
+```
 
->> LIST KEYSPACES
-- USERS
-- VECTOR
-
-
->> DROP KEYSPACE USERS
-Keyspace 'USERS' dropped.
-
-
->> INSERT VECTOR 1,2,3
-SUCCESS : Record inserted
->> INSERT VECTOR 2,3,4
-SUCCESS : Record inserted
-
-
->> SHOW RECORDS VECTOR
-Record 0: [ 1 2 3 ]
-Record 1: [ 2 3 4 ]
-
-
->> SEARCH VECTOR 9,8,7 TOP 2
-Record Index: 0 | Similarity: 0.93325
-Record Index: 1 | Similarity: 0.680787
-
-
->> SHOW METRIC FOR VECTOR
-Keyspace 'VECTOR' is using metric 'dot'.
-
-
->> ALTER KEYSPACE VECTOR SET METRIC COSINE
-Keyspace 'VECTOR' metric changed to 'cosine'.
-
-Persistence
-{
-  "metric": "dot",
-  "records": [
-    [ 1.0, 2.0, 3.0 ],
-    [ 2.0, 3.0, 4.0 ]
-  ]
-}
-
-Exit
->> EXIT
-Bye 👋
-
-Supported Commands (Cheat Sheet)
-
-CREATE KEYSPACE <name> [WITH METRIC COSINE|EUCLIDEAN|DOT]
-DROP KEYSPACE <name>
-LIST KEYSPACES
-INSERT <keyspace> v1,v2,v3,...
-SHOW RECORDS <keyspace>
-SEARCH <keyspace> v1,v2,v3,... TOP k
-SHOW METRIC FOR <keyspace>
-ALTER KEYSPACE <name> SET METRIC COSINE|EUCLIDEAN|DOT
-EXIT
