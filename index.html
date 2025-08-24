@@ -17,6 +17,7 @@
                 <ul>
                     <li><a href="#about">About</a></li>
                     <li><a href="#features">Features</a></li>
+                    <li><a href="#releases">Releases</a></li>
                     <li><a href="#getting-started">Getting Started</a></li>
                     <li><a href="#documentation">Documentation</a></li>
                     <li><a href="#developers">Meet Developer</a></li>
@@ -73,6 +74,36 @@
         </div>
     </section>
 
+    <!-- Releases Section -->
+    <section id="releases" class="section">
+        <div class="container">
+            <h3>📦 Releases</h3>
+            <p>Download the latest binaries of <strong>Project X</strong>. Each release includes the database engine and
+                installer.</p>
+
+            <table class="release-table">
+                <thead>
+                    <tr>
+                        <th>Release</th>
+                        <th>Description</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>v1.0.1</strong></td>
+                        <td>Latest stable release with cross-platform installer fixes (Linux + WSL).</td>
+                        <td><a href="https://github.com/betaSolver05609/Project-X/releases/download/1.0.1/X.zip"
+                                target="_blank">https://github.com/betaSolver05609/Project-X/releases/download/1.0.1/X.zip</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+
     <!-- Getting Started Section -->
     <section id="getting-started" class="section">
         <div class="container">
@@ -86,37 +117,46 @@
             </ul>
             <p><em>The installer will automatically check and install these dependencies if missing.</em></p>
 
-            <h4>📦 Download</h4>
-            <p>
-                Download the latest release from the following link:
-                👉 <a href="<INSERT_LINK_HERE>" target="_blank">Download Project-X</a>
-            </p>
-
             <h4>Installation Steps</h4>
             <pre>
-1. unzip Project-X.zip
-2. cd Project-X/X
-3. chmod +x install.sh
-4. ./install.sh
-      </pre>
-            <p>The installer will install all required dependencies and build the database engine.</p>
+# 1. Download the release zip (choose the URL from the Downloads section)
+curl -L -o Project-X.zip https://github.com/betaSolver05609/Project-X/releases/download/1.0.1/X.zip
+
+# 2. Extract the package
+unzip Project-X.zip
+
+# 3. Move into project directory
+cd Project-X/X
+
+# 4. Make the installer executable
+chmod +x install.sh
+
+# 5. Run the installer
+./install.sh
+</pre>
+
+            <p>The installer will automatically check for dependencies (<code>g++</code>, <code>make</code>,
+                <code>libjsoncpp</code>), install them if missing, and then build the database engine.
+            </p>
 
             <h4>Start</h4>
             <pre>
 projectx
-      </pre>
-            <p>It will start the database.</p>
+</pre>
+            <p>This command will start the database CLI.</p>
 
             <p><b>Note:</b> If you see <code>command not found</code> after installation, add the following line to your
                 <code>~/.bashrc</code> or <code>~/.zshrc</code>:
             </p>
             <pre>
 export PATH="$HOME/.local/bin:$PATH"
-      </pre>
+</pre>
+
             <p>Then reload your shell:</p>
             <pre>
 source ~/.bashrc
-      </pre>
+</pre>
+
         </div>
     </section>
 
