@@ -5,15 +5,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project X - Lightweight Vector Database</title>
+    <meta name="description"
+        content="Project X is a lightweight, high-performance vector database written in C++ for embeddings, similarity search, and rapid AI prototyping." />
+    <meta property="og:title" content="Project X - Lightweight Vector Database" />
+    <meta property="og:description"
+        content="Fast, efficient, and built entirely in C++. Perfect for embeddings, similarity search, and experimentation." />
+    <meta property="og:type" content="website" />
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230d1117'/%3E%3Ctext x='50' y='68' font-size='58' font-family='monospace' font-weight='bold' fill='%2358a6ff' text-anchor='middle'%3EX%3C/text%3E%3C/svg%3E" />
     <link rel="stylesheet" href="style.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <!-- Navigation -->
     <header class="navbar">
-        <div class="container">
-            <nav>
+        <div class="container navbar-inner">
+            <a href="#" class="logo">Project<span class="logo-accent">X</span></a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav id="navMenu">
                 <ul>
                     <li><a href="#about">About</a></li>
                     <li><a href="#features">Features</a></li>
@@ -21,6 +36,7 @@
                     <li><a href="#getting-started">Getting Started</a></li>
                     <li><a href="#documentation">Documentation</a></li>
                     <li><a href="#developers">Meet Developer</a></li>
+                    <li><a href="https://github.com/betaSolver05609/Project-X" target="_blank" class="nav-cta">GitHub</a></li>
                 </ul>
             </nav>
         </div>
@@ -29,13 +45,21 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
+            <div class="hero-badges">
+                <span class="pill">v1.0.1</span>
+                <span class="pill">C++17</span>
+                <span class="pill">MIT License</span>
+            </div>
             <h1 class="hero-title">Project X</h1>
             <h2 class="hero-subtitle">Lightweight Vector Database for AI Developers</h2>
             <p>
                 Fast, efficient, and built entirely in C++. Perfect for embeddings,
                 similarity search, and experimentation.
             </p>
-            <a href="#about" class="btn">Learn More</a>
+            <div class="hero-actions">
+                <a href="#getting-started" class="btn btn-primary">Get Started</a>
+                <a href="https://github.com/betaSolver05609/Project-X" target="_blank" class="btn btn-secondary">View on GitHub</a>
+            </div>
         </div>
     </section>
 
@@ -65,12 +89,28 @@
     <section id="features" class="section alt-bg">
         <div class="container">
             <h3>Key Features</h3>
-            <ul>
-                <li>⚡ Blazing-fast ingestion and search</li>
-                <li>📦 Lightweight with minimal dependencies</li>
-                <li>🔍 Optimized for embeddings and similarity search</li>
-                <li>🛠️ Built for AI developers and rapid prototyping</li>
-            </ul>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h4>Blazing Fast</h4>
+                    <p>Optimized ingestion and search paths deliver low-latency results, even at scale.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h4>Lightweight</h4>
+                    <p>Minimal dependencies and a small footprint make it easy to install and run anywhere.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h4>Similarity Search</h4>
+                    <p>Built-in support for embeddings and similarity search across multiple distance metrics.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛠️</div>
+                    <h4>Developer Friendly</h4>
+                    <p>A simple CLI and clear syntax make rapid prototyping and experimentation effortless.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -399,9 +439,11 @@ Bye 👋
     <footer id="contact">
         <div class="container">
             <p>Built with ❤️ in C++ | Project X</p>
-            <p><a href="https://github.com/your-username/project-x" target="_blank">View on GitHub</a></p>
+            <p><a href="https://github.com/betaSolver05609/Project-X" target="_blank">View on GitHub</a></p>
         </div>
     </footer>
+
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">↑</button>
 
     <script src="index.js"></script>
 </body>
