@@ -6,3 +6,6 @@ data/
 
 db_start.d
 db_start.o
+
+# Ignore VSCode editor settings
+.vscode/

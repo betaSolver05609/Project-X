@@ -1,9 +1,0 @@
-{
-    "C_Cpp.errorSquiggles": "disabled",
-    "files.associations": {
-        "memory": "cpp",
-        "cmath": "cpp",
-        "vector": "cpp",
-        "fstream": "cpp"
-    }
-}
