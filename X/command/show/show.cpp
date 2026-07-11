@@ -23,7 +23,7 @@ void handleShow(std::stringstream &ss, KeySpace &db)
     }
     else if (what == "RECORDS")
     {
-        auto records = db.getRecords(keyspace);
+        auto records = db.getRecordsFull(keyspace);
         if (records.empty())
         {
             std::cout << "(no records found in '" << keyspace << "')\n";
@@ -34,9 +34,12 @@ void handleShow(std::stringstream &ss, KeySpace &db)
             for (auto &r : records)
             {
                 std::cout << "Record " << idx++ << ": [ ";
-                for (auto v : r)
+                for (auto v : r.embedding)
                     std::cout << v << " ";
-                std::cout << "]\n";
+                std::cout << "]";
+                if (!r.text.empty())
+                    std::cout << " | Text: " << r.text;
+                std::cout << "\n";
             }
         }
     }

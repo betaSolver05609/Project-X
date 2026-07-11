@@ -18,9 +18,9 @@ public:
         keyspaceBlocks[name] = Block(metric);
     }
 
-    void insertIntoBlock(const std::string &keyspaceName, const std::vector<float> &record)
+    void insertIntoBlock(const std::string &keyspaceName, const std::vector<float> &record, const std::string &text = "")
     {
-        keyspaceBlocks[keyspaceName].insertRecord(record);
+        keyspaceBlocks[keyspaceName].insertRecord(record, text);
     }
 
     
@@ -65,6 +65,27 @@ public:
         return {};
     }
 
+    const std::vector<Block::Record> &getRecordsFull(const std::string &keyspaceName) const
+    {
+        static const std::vector<Block::Record> empty;
+        auto it = keyspaceBlocks.find(keyspaceName);
+        if (it != keyspaceBlocks.end())
+        {
+            return it->second.getRecordsFull();
+        }
+        return empty;
+    }
+
+    std::string getRecordText(const std::string &keyspaceName, int index) const
+    {
+        auto it = keyspaceBlocks.find(keyspaceName);
+        if (it != keyspaceBlocks.end())
+        {
+            return it->second.getRecordText(index);
+        }
+        return "";
+    }
+
     bool dropKeySpace(const std::string &name)
     {
         auto it = keyspaceBlocks.find(name);
@@ -95,13 +116,16 @@ public:
             
             root["metric"] = it->second.getMetric();
 
-            
-            for (auto &vec : it->second.getRecords())
+
+            for (auto &rec : it->second.getRecordsFull())
             {
                 Json::Value arr(Json::arrayValue);
-                for (auto v : vec)
+                for (auto v : rec.embedding)
                     arr.append(v);
-                root["records"].append(arr);
+                Json::Value entry;
+                entry["embedding"] = arr;
+                entry["text"] = rec.text;
+                root["records"].append(entry);
             }
         }
         return root;
@@ -109,20 +133,20 @@ public:
 
     void fromJson(const std::string &name, const Json::Value &root)
     {
-        
+
         std::string metric = root.isMember("metric")
                                  ? root["metric"].asString()
                                  : "cosine";
 
         Block block(metric);
 
-        
+
         for (auto &rec : root["records"])
         {
             std::vector<float> vec;
-            for (auto &v : rec)
+            for (auto &v : rec["embedding"])
                 vec.push_back(v.asFloat());
-            block.insertRecord(vec);
+            block.insertRecord(vec, rec.get("text", "").asString());
         }
 
         keyspaceBlocks[name] = block;

@@ -1,6 +1,7 @@
 #include "ingest.h"
 #include "../../ingest/ingest.h" // the ingestion engine
 #include "./keyspace-hashtable/KeySpace.h"
+#include "../../common_utils/common_utils.h"
 #include <iostream>
 
 void handleIngestCommand(std::stringstream &ss, KeySpace &db)
@@ -35,5 +36,8 @@ void handleIngestCommand(std::stringstream &ss, KeySpace &db)
     {
         std::cout << "Ingest failed for keyspace '" << keyspaceName
                   << "' with file '" << filepath << "'.\n";
+        return;
     }
+
+    saveDb(db, keyspaceName);
 }

@@ -25,6 +25,6 @@ void handleCreate(std::stringstream &ss, KeySpace &db)
         db.createKeySpace(keyspace, metricType);
         std::cout << "Keyspace '" << keyspace
                   << "' created with metric '" << metricType << "'.\n";
-        saveDb(db);
+        saveDb(db, keyspace);
     }
 }

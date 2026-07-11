@@ -8,6 +8,10 @@
 #include "../command/drop/drop.h"
 #include "../command/exit/exit.h"
 #include "../command/ingest/ingest.h"
+#include "../command/begin/begin.h"
+#include "../command/commit/commit.h"
+#include "../command/rollback/rollback.h"
+#include "../command/batch/batch.h"
 #include "../common_utils/common_utils.h"
 #include <iostream>
 
@@ -32,6 +36,14 @@ bool dispatchCommand(std::stringstream &ss, KeySpace &db)
         handleShow(ss, db);
     else if (cmd == "DROP")
         handleDrop(ss, db);
+    else if (cmd == "BEGIN")
+        handleBegin(ss, db);
+    else if (cmd == "COMMIT")
+        handleCommit(ss, db);
+    else if (cmd == "ROLLBACK")
+        handleRollback(ss, db);
+    else if (cmd == "BATCH")
+        handleBatch(ss, db);
     else if (cmd == "EXIT")
         return handleExit(ss, db);
     else

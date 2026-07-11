@@ -22,7 +22,11 @@ void handleSearch(std::stringstream &ss, KeySpace &db) {
     } else {
         for (auto &r : results) {
             std::cout << "Record Index: " << r.first
-                      << " | Similarity: " << r.second << "\n";
+                      << " | Similarity: " << r.second;
+            std::string text = db.getRecordText(keyspace, r.first);
+            if (!text.empty())
+                std::cout << " | Text: " << text;
+            std::cout << "\n";
         }
     }
 }

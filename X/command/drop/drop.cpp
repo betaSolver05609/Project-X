@@ -1,7 +1,8 @@
 #include "drop.h"
 #include <iostream>
-#include <cstdio>   
+#include <cstdio>
 #include "../../common_utils/common_utils.h"
+#include "../../transaction-utils/TransactionContext.h"
 
 void handleDrop(std::stringstream &ss, KeySpace &db)
 {
@@ -16,14 +17,21 @@ void handleDrop(std::stringstream &ss, KeySpace &db)
 
         if (dropped)
         {
-            
-            std::string path = "data/" + name + ".json";
-            if (std::remove(path.c_str()) == 0)
-                std::cout << "Keyspace '" << name << "' dropped and file deleted.\n";
+            if (TransactionContext::isActive())
+            {
+                // Defer the physical file removal to COMMIT so a ROLLBACK can still
+                // recover it; the in-memory keyspace is already gone for this session.
+                TransactionContext::markPendingDelete(name);
+                std::cout << "Keyspace '" << name << "' dropped (pending commit).\n";
+            }
             else
-                std::cout << "Keyspace '" << name << "' dropped (file not found).\n";
-
-            saveDb(db); 
+            {
+                std::string path = "data/" + name + ".bin";
+                if (std::remove(path.c_str()) == 0)
+                    std::cout << "Keyspace '" << name << "' dropped and file deleted.\n";
+                else
+                    std::cout << "Keyspace '" << name << "' dropped (file not found).\n";
+            }
         }
         else
         {
